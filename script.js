@@ -43,23 +43,23 @@ buttonsContainer.addEventListener('click', event => {
     if (isDigit) {
         const digit = button.innerText;
 
-        firstOperand = Number(overwriteOperand ? digit : firstOperand + digit);
-        overwriteOperand = firstOperand === 0;
+        secondOperand = Number(overwriteOperand ? digit : secondOperand + digit);
+        overwriteOperand = secondOperand === 0;
     }
 
     if (isEquals || forceOperation) {
         if (!operator) return;
 
-        firstOperand = operate(firstOperand, operator, secondOperand);
+        secondOperand = operate(firstOperand, operator, secondOperand);
         overwriteOperand = true;
         operator = '';
     }
 
     if (isOperator) {
         operator = button.innerText;
-        secondOperand = firstOperand;
+        firstOperand = secondOperand;
         overwriteOperand = true;
     }
 
-    display.innerText = firstOperand;
+    display.innerText = secondOperand;
 })
