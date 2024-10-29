@@ -31,40 +31,50 @@ function operate(a, operator, b) {
     }
 }
 
-let firstOperand = 0;
-let secondOperand = 0;
+let operand = '0';
+let displayOperand = '0';
 let operator = '';
-let overwriteOperand = true;
+let overwriteDisplayOperand = true;
 
 buttonsContainer.addEventListener('click', event => {
     if (event.target === buttonsContainer) return;
 
     const button = event.target;
     const isDigit = button.classList.contains('digit');
+    const isDecimalPoint = button.classList.contains('decimal-point');
     const isOperator = button.classList.contains('operator');
     const isEquals = button.classList.contains('equals');
-    const forceOperation = isOperator && operator && !overwriteOperand;
+    const forceOperation = isOperator && operator && !overwriteDisplayOperand;
 
     if (isDigit) {
         const digit = button.innerText;
 
-        secondOperand = Number(overwriteOperand ? digit : secondOperand + digit);
-        overwriteOperand = secondOperand === 0;
+        displayOperand =
+            overwriteDisplayOperand ? digit : displayOperand + digit;
+        overwriteDisplayOperand = displayOperand === '0';
+    }
+
+    if (isDecimalPoint) {
+        if (displayOperand.includes('.') && !overwriteDisplayOperand) return;
+
+        displayOperand = overwriteDisplayOperand ? '0.' : displayOperand + '.';
+        overwriteDisplayOperand = false;
     }
 
     if (isEquals || forceOperation) {
         if (!operator) return;
 
-        secondOperand = operate(firstOperand, operator, secondOperand);
-        overwriteOperand = true;
+        displayOperand =
+            operate(Number(operand), operator, Number(displayOperand));
+        overwriteDisplayOperand = true;
         operator = '';
     }
 
     if (isOperator) {
         operator = button.innerText;
-        firstOperand = secondOperand;
-        overwriteOperand = true;
+        operand = displayOperand;
+        overwriteDisplayOperand = true;
     }
 
-    display.innerText = secondOperand;
+    display.innerText = displayOperand;
 })
