@@ -31,10 +31,9 @@ function operate(a, operator, b) {
     }
 }
 
-let operand = '0';
-let displayOperand = '0';
-let operator = '';
-let overwriteDisplayOperand = true;
+let leftOperand = rightOperand = '0';
+let operator = '+';
+let overwrite = true;
 
 buttonsContainer.addEventListener('click', event => {
     if (event.target === buttonsContainer) return;
@@ -42,39 +41,41 @@ buttonsContainer.addEventListener('click', event => {
     const button = event.target;
     const isDigit = button.classList.contains('digit');
     const isDecimalPoint = button.classList.contains('decimal-point');
-    const isOperator = button.classList.contains('operator');
     const isEquals = button.classList.contains('equals');
-    const forceOperation = isOperator && operator && !overwriteDisplayOperand;
+    const isOperator = button.classList.contains('operator');
+    const result =
+        String(operate(Number(leftOperand), operator, Number(rightOperand)));
 
     if (isDigit) {
         const digit = button.innerText;
 
-        displayOperand =
-            overwriteDisplayOperand ? digit : displayOperand + digit;
-        overwriteDisplayOperand = displayOperand === '0';
+        rightOperand = overwrite ? digit : rightOperand + digit;
+        overwrite = overwrite && digit === '0';
     }
 
     if (isDecimalPoint) {
-        if (displayOperand.includes('.') && !overwriteDisplayOperand) return;
+        if (!overwrite && rightOperand.includes('.')) return;
 
-        displayOperand = overwriteDisplayOperand ? '0.' : displayOperand + '.';
-        overwriteDisplayOperand = false;
-    }
-
-    if (isEquals || forceOperation) {
-        if (!operator) return;
-
-        displayOperand =
-            operate(Number(operand), operator, Number(displayOperand));
-        overwriteDisplayOperand = true;
-        operator = '';
+        rightOperand = overwrite ? '0.' : rightOperand + '.';
+        overwrite = false;
     }
 
     if (isOperator) {
+        if (!overwrite) {
+            rightOperand = result;
+        }
+
+        leftOperand = rightOperand;
         operator = button.innerText;
-        operand = displayOperand;
-        overwriteDisplayOperand = true;
+        overwrite = true;
     }
 
-    display.innerText = displayOperand;
+    if (isEquals) {
+        rightOperand = result;
+        leftOperand = '0';
+        operator = '+';
+        overwrite = true;
+    }
+
+    display.innerText = rightOperand;
 })
