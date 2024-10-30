@@ -60,8 +60,6 @@ function handleOperatorClick(newOperator) {
         leftOperand = rightOperand = result;
     }
 
-    if (leftOperand === 0) leftOperand = rightOperand;
-
     operator = newOperator;
     overwrite = true;
 }
@@ -70,8 +68,7 @@ function handleEqualsClick() {
     const result = operate(leftOperand, operator, rightOperand);
 
     displayContent = String(result);
-    rightOperand = result;
-    leftOperand = 0;
+    leftOperand = rightOperand = result;
     operator = '+';
     overwrite = true;
 }
