@@ -1,6 +1,11 @@
 const display = document.querySelector('.display');
 const buttonsContainer = document.querySelector('.buttons');
 
+let leftOperand = rightOperand = 0;
+let operator = '+';
+let displayContent = '0';
+let overwrite = false;
+
 function add(a, b) {
     return a + b;
 }
@@ -31,14 +36,14 @@ function operate(a, operator, b) {
     }
 }
 
-function handleDigitClick(digit) {
+function addDigit(digit) {
     displayContent =
         (overwrite || displayContent === '0') ? digit : displayContent + digit;
     rightOperand = Number(displayContent);
     overwrite = false;
 }
 
-function handleDecimalPointClick() {
+function addDecimalPoint() {
     if (!overwrite && displayContent.includes('.')) return;
 
     displayContent = overwrite ? '0.' : displayContent + '.';
@@ -46,13 +51,13 @@ function handleDecimalPointClick() {
     overwrite = false;
 }
 
-function handleSignClick() {
+function toggleSign() {
     rightOperand = overwrite ? 0 : rightOperand * -1;
     displayContent = String(rightOperand);
     overwrite = false;
 }
 
-function handleOperatorClick(newOperator) {
+function setOperator(newOperator) {
     if (!overwrite) {
         const result = operate(leftOperand, operator, rightOperand);
 
@@ -64,7 +69,7 @@ function handleOperatorClick(newOperator) {
     overwrite = true;
 }
 
-function handleEqualsClick() {
+function calculate() {
     const result = operate(leftOperand, operator, rightOperand);
 
     displayContent = String(result);
@@ -73,44 +78,31 @@ function handleEqualsClick() {
     overwrite = true;
 }
 
-function handleClearClick() {
+function clear() {
     displayContent = '0';
     rightOperand = 0;
     overwrite = true;
 }
 
-function handleAllClearClick() {
+function reset() {
     displayContent = '0';
     leftOperand = rightOperand = 0;
     operator = '+';
 }
 
-let leftOperand = rightOperand = 0;
-let operator = '+';
-let displayContent = display.innerText;
-let overwrite = false;
-
 buttonsContainer.addEventListener('click', event => {
-    if (event.target === buttonsContainer) return;
+    const isDigit = event.target.classList.contains('digit');
+    const isOperator = event.target.classList.contains('operator');
 
-    const button = event.target;
-    const isDigit = button.classList.contains('digit');
-    const isDecimalPoint = button.classList.contains('decimal-point');
-    const isSign = button.classList.contains('sign');
-    const isOperator = button.classList.contains('operator');
-    const isEquals = button.classList.contains('equals');
-    const isClear = button.classList.contains('clear');
-    const isAllClear = button.classList.contains('all-clear');
-
-    if (isDigit) handleDigitClick(button.innerText);
-    else if (isDecimalPoint) handleDecimalPointClick();
-    else if (isSign) handleSignClick();
-    else if (isOperator) handleOperatorClick(button.innerText);
-    else if (isEquals) handleEqualsClick();
-    else if (isClear) handleClearClick();
-    else if (isAllClear) handleAllClearClick();
+    if (isDigit) addDigit(event.target.innerText);
+    else if (isOperator) setOperator(event.target.innerText);
 
     display.innerText = displayContent;
-
-    console.log(leftOperand, operator, rightOperand, overwrite);
 });
+
+document.querySelector('.decimal-point')
+    .addEventListener('click', addDecimalPoint);
+document.querySelector('.sign').addEventListener('click', toggleSign);
+document.querySelector('.equal').addEventListener('click', calculate);
+document.querySelector('.clear').addEventListener('click', clear);
+document.querySelector('.reset').addEventListener('click', reset);
