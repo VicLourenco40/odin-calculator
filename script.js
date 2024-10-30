@@ -31,8 +31,45 @@ function operate(a, operator, b) {
     }
 }
 
-let leftOperand = rightOperand = '0';
+function handleDigitClick(digit) {
+    displayContent = overwrite ? digit : displayContent + digit;
+    rightOperand = Number(displayContent);
+    overwrite = overwrite && digit === '0';
+}
+
+function handleDecimalPointClick() {
+    if (!overwrite && rightOperand.includes('.')) return;
+
+    displayContent = overwrite ? '0.' : displayContent + '.';
+    rightOperand = Number(displayContent);
+    overwrite = false;
+}
+
+function handleOperatorClick(newOperator) {
+    if (!overwrite) {
+        const result = operate(leftOperand, operator, rightOperand);
+
+        displayContent = String(result);
+    };
+
+    leftOperand = rightOperand = Number(displayContent);
+    operator = newOperator;
+    overwrite = true;
+}
+
+function handleEqualsClick() {
+    const result = operate(leftOperand, operator, rightOperand);
+
+    displayContent = String(result);
+    rightOperand = result;
+    leftOperand = 0;
+    operator = '+';
+    overwrite = true;
+}
+
+let leftOperand = rightOperand = 0;
 let operator = '+';
+let displayContent = display.innerText;
 let overwrite = true;
 
 buttonsContainer.addEventListener('click', event => {
@@ -41,41 +78,13 @@ buttonsContainer.addEventListener('click', event => {
     const button = event.target;
     const isDigit = button.classList.contains('digit');
     const isDecimalPoint = button.classList.contains('decimal-point');
-    const isEquals = button.classList.contains('equals');
     const isOperator = button.classList.contains('operator');
-    const result =
-        String(operate(Number(leftOperand), operator, Number(rightOperand)));
+    const isEquals = button.classList.contains('equals');
 
-    if (isDigit) {
-        const digit = button.innerText;
+    if (isDigit) handleDigitClick(button.innerText);
+    else if (isDecimalPoint) handleDecimalPointClick();
+    else if (isOperator) handleOperatorClick(button.innerText);
+    else if (isEquals) handleEqualsClick();
 
-        rightOperand = overwrite ? digit : rightOperand + digit;
-        overwrite = overwrite && digit === '0';
-    }
-
-    if (isDecimalPoint) {
-        if (!overwrite && rightOperand.includes('.')) return;
-
-        rightOperand = overwrite ? '0.' : rightOperand + '.';
-        overwrite = false;
-    }
-
-    if (isOperator) {
-        if (!overwrite) {
-            rightOperand = result;
-        }
-
-        leftOperand = rightOperand;
-        operator = button.innerText;
-        overwrite = true;
-    }
-
-    if (isEquals) {
-        rightOperand = result;
-        leftOperand = '0';
-        operator = '+';
-        overwrite = true;
-    }
-
-    display.innerText = rightOperand;
-})
+    display.innerText = displayContent;
+});
