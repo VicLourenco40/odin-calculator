@@ -32,9 +32,10 @@ function operate(a, operator, b) {
 }
 
 function handleDigitClick(digit) {
-    displayContent = overwrite ? digit : displayContent + digit;
+    displayContent =
+        (overwrite || displayContent === '0') ? digit : displayContent + digit;
     rightOperand = Number(displayContent);
-    overwrite = overwrite && digit === '0';
+    overwrite = false;
 }
 
 function handleDecimalPointClick() {
@@ -45,13 +46,21 @@ function handleDecimalPointClick() {
     overwrite = false;
 }
 
+function handleSignClick() {
+    rightOperand = overwrite ? 0 : rightOperand * -1;
+    displayContent = String(rightOperand);
+    overwrite = false;
+}
+
 function handleOperatorClick(newOperator) {
     if (!overwrite) {
         const result = operate(leftOperand, operator, rightOperand);
 
         displayContent = String(result);
         leftOperand = rightOperand = result;
-    };
+    }
+
+    if (leftOperand === 0) leftOperand = rightOperand;
 
     operator = newOperator;
     overwrite = true;
@@ -77,13 +86,12 @@ function handleAllClearClick() {
     displayContent = '0';
     leftOperand = rightOperand = 0;
     operator = '+';
-    overwrite = true;
 }
 
 let leftOperand = rightOperand = 0;
 let operator = '+';
 let displayContent = display.innerText;
-let overwrite = true;
+let overwrite = false;
 
 buttonsContainer.addEventListener('click', event => {
     if (event.target === buttonsContainer) return;
@@ -91,6 +99,7 @@ buttonsContainer.addEventListener('click', event => {
     const button = event.target;
     const isDigit = button.classList.contains('digit');
     const isDecimalPoint = button.classList.contains('decimal-point');
+    const isSign = button.classList.contains('sign');
     const isOperator = button.classList.contains('operator');
     const isEquals = button.classList.contains('equals');
     const isClear = button.classList.contains('clear');
@@ -98,10 +107,13 @@ buttonsContainer.addEventListener('click', event => {
 
     if (isDigit) handleDigitClick(button.innerText);
     else if (isDecimalPoint) handleDecimalPointClick();
+    else if (isSign) handleSignClick();
     else if (isOperator) handleOperatorClick(button.innerText);
     else if (isEquals) handleEqualsClick();
     else if (isClear) handleClearClick();
     else if (isAllClear) handleAllClearClick();
 
     display.innerText = displayContent;
+
+    console.log(leftOperand, operator, rightOperand, overwrite);
 });
