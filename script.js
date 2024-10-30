@@ -50,9 +50,9 @@ function handleOperatorClick(newOperator) {
         const result = operate(leftOperand, operator, rightOperand);
 
         displayContent = String(result);
+        leftOperand = rightOperand = result;
     };
 
-    leftOperand = rightOperand = Number(displayContent);
     operator = newOperator;
     overwrite = true;
 }
