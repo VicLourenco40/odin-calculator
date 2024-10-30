@@ -67,6 +67,12 @@ function handleEqualsClick() {
     overwrite = true;
 }
 
+function handleClearClick() {
+    displayContent = '0';
+    rightOperand = 0;
+    overwrite = true;
+}
+
 function handleAllClearClick() {
     displayContent = '0';
     leftOperand = rightOperand = 0;
@@ -87,12 +93,14 @@ buttonsContainer.addEventListener('click', event => {
     const isDecimalPoint = button.classList.contains('decimal-point');
     const isOperator = button.classList.contains('operator');
     const isEquals = button.classList.contains('equals');
+    const isClear = button.classList.contains('clear');
     const isAllClear = button.classList.contains('all-clear');
 
     if (isDigit) handleDigitClick(button.innerText);
     else if (isDecimalPoint) handleDecimalPointClick();
     else if (isOperator) handleOperatorClick(button.innerText);
     else if (isEquals) handleEqualsClick();
+    else if (isClear) handleClearClick();
     else if (isAllClear) handleAllClearClick();
 
     display.innerText = displayContent;
