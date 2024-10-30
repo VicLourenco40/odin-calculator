@@ -38,7 +38,7 @@ function handleDigitClick(digit) {
 }
 
 function handleDecimalPointClick() {
-    if (!overwrite && rightOperand.includes('.')) return;
+    if (!overwrite && displayContent.includes('.')) return;
 
     displayContent = overwrite ? '0.' : displayContent + '.';
     rightOperand = Number(displayContent);
