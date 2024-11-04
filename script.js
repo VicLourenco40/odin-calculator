@@ -30,7 +30,9 @@ function operate(a, operator, b) {
     switch (operator) {
         case '+': return add(a, b);
         case '-': return subtract(a, b);
+        case '*':
         case 'x': return multiply(a, b);
+        case '/':
         case '÷': return divide(a, b);
         case '%': return mod(a, b);
     }
@@ -124,8 +126,10 @@ document.addEventListener('keydown', event => {
     const isDigit = !isNaN(event.key);
     const isOperator = ('+-*/%').includes(event.key);
 
+
+
     if (isDigit) addDigit(event.key);
-    else if (isOperator) setOperator(event.key === '*' ? 'x' : event.key);
+    else if (isOperator) setOperator(event.key);
     else switch(event.key) {
         case '.': addDecimalPoint(); break;
         case '_': toggleSign(); break;
