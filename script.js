@@ -122,7 +122,7 @@ document.querySelector('.reset').addEventListener('click', reset);
 
 document.addEventListener('keydown', event => {
     const isDigit = !isNaN(event.key);
-    const isOperator = ('+-*\\%').includes(event.key);
+    const isOperator = ('+-*/%').includes(event.key);
 
     if (isDigit) addDigit(event.key);
     else if (isOperator) setOperator(event.key === '*' ? 'x' : event.key);
