@@ -65,7 +65,6 @@ body {
 .display {
   font-family: 'DSEG7Classic', sans-serif;
   font-size: 4rem;
-  overflow: hidden;
   color: var(--color-text-dark);
   background-color: var(--color-display);
   border-radius: 0.5rem;

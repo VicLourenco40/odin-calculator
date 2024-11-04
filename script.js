@@ -74,7 +74,6 @@ function calculate() {
 
     displayContent = String(result);
     leftOperand = rightOperand = result;
-    operator = '+';
     overwrite = true;
 }
 
@@ -97,7 +96,16 @@ buttonsContainer.addEventListener('click', event => {
     if (isDigit) addDigit(event.target.innerText);
     else if (isOperator) setOperator(event.target.innerText);
 
-    display.innerText = displayContent;
+    const error = displayContent === 'NaN' ||
+        displayContent.includes('Infinity');
+
+    if (error) {
+        display.innerText = 'Error';
+        reset();
+    } else {
+        const decimalPoint = displayContent.slice(0, 9).includes('.');
+        display.innerText = displayContent.slice(0, 8 + decimalPoint);
+    }
 });
 
 document.querySelector('.decimal-point')
