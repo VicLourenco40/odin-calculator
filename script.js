@@ -1,7 +1,7 @@
+let displayContent = '0';
 let leftOperand = rightOperand = 0;
 let operator = '+';
-let displayContent = '0';
-let overwrite = false;
+let overwrite = true;
 
 function add(a, b) {
     return a + b;
@@ -89,6 +89,7 @@ function reset() {
     displayContent = '0';
     leftOperand = rightOperand = 0;
     operator = '+';
+    overwrite = true;
 }
 
 function updateDisplay() {
@@ -100,9 +101,9 @@ function updateDisplay() {
         display.innerText = 'Error';
         reset();
     } else {
-        const decimalPoint = displayContent.slice(0, 9).includes('.');
         const sign = displayContent[0] === '-';
-        display.innerText = displayContent.slice(0, 7 + decimalPoint + sign);
+        const decimalPoint = displayContent.slice(0, 9).includes('.');
+        display.innerText = displayContent.slice(0, 7 + sign + decimalPoint);
     }
 }
 
