@@ -74,6 +74,7 @@ function calculate() {
 
     displayContent = String(result);
     leftOperand = rightOperand = result;
+    operator = '+';
     overwrite = true;
 }
 
@@ -89,13 +90,7 @@ function reset() {
     operator = '+';
 }
 
-buttonsContainer.addEventListener('click', event => {
-    const isDigit = event.target.classList.contains('digit');
-    const isOperator = event.target.classList.contains('operator');
-
-    if (isDigit) addDigit(event.target.innerText);
-    else if (isOperator) setOperator(event.target.innerText);
-
+function updateDisplay() {
     const error = displayContent === 'NaN' ||
         displayContent.includes('Infinity');
 
@@ -106,6 +101,16 @@ buttonsContainer.addEventListener('click', event => {
         const decimalPoint = displayContent.slice(0, 9).includes('.');
         display.innerText = displayContent.slice(0, 8 + decimalPoint);
     }
+}
+
+buttonsContainer.addEventListener('click', event => {
+    const isDigit = event.target.classList.contains('digit');
+    const isOperator = event.target.classList.contains('operator');
+
+    if (isDigit) addDigit(event.target.innerText);
+    else if (isOperator) setOperator(event.target.innerText);
+
+    updateDisplay();
 });
 
 document.querySelector('.decimal-point')
@@ -114,3 +119,20 @@ document.querySelector('.sign').addEventListener('click', toggleSign);
 document.querySelector('.equal').addEventListener('click', calculate);
 document.querySelector('.clear').addEventListener('click', clear);
 document.querySelector('.reset').addEventListener('click', reset);
+
+document.addEventListener('keydown', event => {
+    const isDigit = !isNaN(event.key);
+    const isOperator = ('+-*\\%').includes(event.key);
+
+    if (isDigit) addDigit(event.key);
+    else if (isOperator) setOperator(event.key === '*' ? 'x' : event.key);
+    else switch(event.key) {
+        case '.': addDecimalPoint(); break;
+        case '_': toggleSign(); break;
+        case 'Enter': calculate(); break;
+        case 'Backspace': clear(); break;
+        case 'Escape': reset(); break;
+    }
+
+    updateDisplay();
+});
