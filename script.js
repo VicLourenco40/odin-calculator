@@ -61,9 +61,10 @@ function setOperator(newOperator) {
         const result = operate(leftOperand, operator, rightOperand);
 
         displayContent = String(result);
-        leftOperand = rightOperand = result;
+        rightOperand = result;
     }
 
+    leftOperand = rightOperand;
     operator = newOperator;
     overwrite = true;
 }
@@ -72,7 +73,8 @@ function calculate() {
     const result = operate(leftOperand, operator, rightOperand);
 
     displayContent = String(result);
-    leftOperand = rightOperand = result;
+    rightOperand = result;
+    leftOperand = 0;
     operator = '+';
     overwrite = true;
 }
@@ -80,7 +82,7 @@ function calculate() {
 function clear() {
     displayContent = '0';
     rightOperand = 0;
-    overwrite = true;
+    overwrite = false;
 }
 
 function reset() {
@@ -132,6 +134,8 @@ document.addEventListener('keydown', event => {
         case 'Backspace': clear(); break;
         case 'Escape': reset(); break;
     }
+
+    console.log(leftOperand, operator, rightOperand, overwrite);
 
     updateDisplay();
 });
