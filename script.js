@@ -1,6 +1,3 @@
-const display = document.querySelector('.display');
-const buttonsContainer = document.querySelector('.buttons');
-
 let leftOperand = rightOperand = 0;
 let operator = '+';
 let displayContent = '0';
@@ -93,6 +90,7 @@ function reset() {
 }
 
 function updateDisplay() {
+    const display = document.querySelector('.display');
     const error = displayContent === 'NaN' ||
         displayContent.includes('Infinity');
 
@@ -105,7 +103,7 @@ function updateDisplay() {
     }
 }
 
-buttonsContainer.addEventListener('click', event => {
+document.querySelector('.buttons').addEventListener('click', event => {
     const isDigit = event.target.classList.contains('digit');
     const isOperator = event.target.classList.contains('operator');
 
@@ -114,7 +112,6 @@ buttonsContainer.addEventListener('click', event => {
 
     updateDisplay();
 });
-
 document.querySelector('.decimal-point')
     .addEventListener('click', addDecimalPoint);
 document.querySelector('.sign').addEventListener('click', toggleSign);
@@ -125,8 +122,6 @@ document.querySelector('.reset').addEventListener('click', reset);
 document.addEventListener('keydown', event => {
     const isDigit = !isNaN(event.key);
     const isOperator = ('+-*/%').includes(event.key);
-
-
 
     if (isDigit) addDigit(event.key);
     else if (isOperator) setOperator(event.key);
