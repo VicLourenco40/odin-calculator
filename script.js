@@ -106,7 +106,7 @@ function updateDisplay() {
     }
 }
 
-document.querySelector('.buttons').addEventListener('click', event => {
+function handleButtonClick(event) {
     const isDigit = event.target.classList.contains('digit');
     const isOperator = event.target.classList.contains('operator');
 
@@ -114,15 +114,9 @@ document.querySelector('.buttons').addEventListener('click', event => {
     else if (isOperator) setOperator(event.target.innerText);
 
     updateDisplay();
-});
-document.querySelector('.decimal-point')
-    .addEventListener('click', addDecimalPoint);
-document.querySelector('.sign').addEventListener('click', toggleSign);
-document.querySelector('.equal').addEventListener('click', calculate);
-document.querySelector('.clear').addEventListener('click', clear);
-document.querySelector('.reset').addEventListener('click', reset);
+}
 
-document.addEventListener('keydown', event => {
+function handleKeyPress(event) {
     const isDigit = !isNaN(event.key);
     const isOperator = ('+-*/%').includes(event.key);
 
@@ -136,7 +130,14 @@ document.addEventListener('keydown', event => {
         case 'Escape': reset(); break;
     }
 
-    console.log(leftOperand, operator, rightOperand, overwrite);
-
     updateDisplay();
-});
+}
+
+document.querySelector('.buttons').addEventListener('click', handleButtonClick);
+document.querySelector('.decimal-point')
+    .addEventListener('click', addDecimalPoint);
+document.querySelector('.sign').addEventListener('click', toggleSign);
+document.querySelector('.equal').addEventListener('click', calculate);
+document.querySelector('.clear').addEventListener('click', clear);
+document.querySelector('.reset').addEventListener('click', reset);
+document.addEventListener('keydown', handleKeyPress);
