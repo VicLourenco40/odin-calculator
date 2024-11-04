@@ -101,7 +101,8 @@ function updateDisplay() {
         reset();
     } else {
         const decimalPoint = displayContent.slice(0, 9).includes('.');
-        display.innerText = displayContent.slice(0, 8 + decimalPoint);
+        const sign = displayContent[0] === '-';
+        display.innerText = displayContent.slice(0, 7 + decimalPoint + sign);
     }
 }
 
